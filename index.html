@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Renk Kodu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Outfit', 'sans-serif'],
+                    },
+                    colors: {
+                        gray: {
+                            850: '#1f2937',
+                            900: '#111827',
+                            950: '#030712',
+                        }
+                    },
+                    boxShadow: {
+                        'neon': '0 0 20px rgba(139, 92, 246, 0.5), 0 0 60px rgba(59, 130, 246, 0.3)',
+                        'neon-hover': '0 0 30px rgba(139, 92, 246, 0.8), 0 0 80px rgba(59, 130, 246, 0.5)',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #000000;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        /* Custom Range Slider Styling */
+        input[type=range] {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100%;
+            background: transparent;
+        }
+
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 20px;
+            width: 20px;
+            border-radius: 50%;
+            background: #ffffff;
+            cursor: pointer;
+            margin-top: -8px;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.8);
+            transition: transform 0.1s;
+        }
+
+        input[type=range]::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+        }
+
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 4px;
+            cursor: pointer;
+            background: #374151;
+            border-radius: 2px;
+        }
+
+        .glass-panel {
+            background: rgba(17, 24, 39, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .glow-bg {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(124, 58, 237, 0.15) 0%, rgba(0, 0, 0, 0) 70%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: -1;
+            pointer-events: none;
+        }
+    </style>
+</head>
+
+<body class="min-h-screen flex items-center justify-center p-4 relative selection:bg-purple-500 selection:text-white">
+
+    <!-- Background Glow -->
+    <div class="glow-bg"></div>
+
+    <div class="max-w-md w-full glass-panel rounded-3xl p-8 shadow-2xl relative overflow-hidden">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <h1
+                class="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-400 via-gray-600 to-gray-800 tracking-tight">
+                Renk Kodu
+            </h1>
+            <p class="text-gray-600 text-sm mt-2 font-light">İstediğiniz rengin css kodunu tek tıkla kopyalayın</p>
+        </div>
+
+        <!-- Gradient Preview -->
+        <div class="relative group">
+            <div id="gradient-preview"
+                class="w-full h-48 rounded-2xl shadow-neon transition-all duration-500 mb-8 border border-white/10">
+            </div>
+            <div
+                class="absolute inset-0 rounded-2xl bg-gradient-to-r from-white/0 to-white/0 group-hover:from-white/5 group-hover:to-white/5 transition-all duration-500 pointer-events-none">
+            </div>
+        </div>
+
+        <!-- Controls -->
+        <div class="space-y-6">
+            <!-- Color 1 Slider -->
+            <div class="space-y-2">
+                <div class="flex justify-between text-xs uppercase tracking-wider text-gray-400 font-semibold">
+                    <label>RENK 1</label>
+                    <span id="color1-val" class="text-purple-400">#000000</span>
+                </div>
+                <input type="range" id="color1-hue" min="0" max="360" value="270" class="w-full">
+            </div>
+
+            <!-- Color 2 Slider -->
+            <div class="space-y-2">
+                <div class="flex justify-between text-xs uppercase tracking-wider text-gray-400 font-semibold">
+                    <label>RENK 2</label>
+                    <span id="color2-val" class="text-blue-400">#000000</span>
+                </div>
+                <input type="range" id="color2-hue" min="0" max="360" value="200" class="w-full">
+            </div>
+
+            <!-- Angle Slider -->
+            <div class="space-y-2">
+                <div class="flex justify-between text-xs uppercase tracking-wider text-gray-400 font-semibold">
+                    <label>AÇI</label>
+                    <span id="angle-val" class="text-gray-300">135°</span>
+                </div>
+                <input type="range" id="angle" min="0" max="360" value="135" class="w-full">
+            </div>
+        </div>
+
+        <!-- CSS Output & Copy -->
+        <div class="mt-8 pt-6 border-t border-gray-700/50">
+            <div class="relative">
+                <code id="css-output"
+                    class="block w-full bg-gray-900/50 text-gray-300 text-xs p-4 rounded-xl font-mono break-all border border-gray-700/50 hover:border-purple-500/30 transition-colors">
+                    background: linear-gradient(135deg, #..., #...);
+                </code>
+
+                <button id="copy-btn"
+                    class="mt-4 w-full py-3.5 bg-black border border-gray-800 rounded-xl font-semibold text-white shadow-lg shadow-gray-900/20 hover:bg-gray-900 hover:scale-[1.02] active:scale-[0.98] transition-all duration-200 flex items-center justify-center gap-2 group">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 group-hover:rotate-12 transition-transform"
+                        fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                    </svg>
+                    <span id="btn-text">CSS kodunu kopyala</span>
+                </button>
+            </div>
+
+            <!-- GitHub Link -->
+            <div class="mt-6 text-center">
+                <a href="https://github.com/umutyalcin-pen" target="_blank"
+                    class="text-gray-500 hover:text-white text-xs transition-colors flex items-center justify-center gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
+                        <path
+                            d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+                    </svg>
+                    GitHub: umutyalcin-pen
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Elements
+        const preview = document.getElementById('gradient-preview');
+        const color1Slider = document.getElementById('color1-hue');
+        const color2Slider = document.getElementById('color2-hue');
+        const angleSlider = document.getElementById('angle');
+        const color1Val = document.getElementById('color1-val');
+        const color2Val = document.getElementById('color2-val');
+        const angleVal = document.getElementById('angle-val');
+        const cssOutput = document.getElementById('css-output');
+        const copyBtn = document.getElementById('copy-btn');
+        const btnText = document.getElementById('btn-text');
+
+        // State
+        let state = {
+            h1: 270,
+            h2: 200,
+            angle: 135
+        };
+
+        // Helper: HSL to Hex
+        function hslToHex(h, s, l) {
+            l /= 100;
+            const a = s * Math.min(l, 1 - l) / 100;
+            const f = n => {
+                const k = (n + h / 30) % 12;
+                const color = l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
+                return Math.round(255 * color).toString(16).padStart(2, '0');
+            };
+            return `#${f(0)}${f(8)}${f(4)}`;
+        }
+
+        // Update Function
+        function updateGradient() {
+            // Using high saturation and lightness for neon effect
+            const c1 = hslToHex(state.h1, 80, 60);
+            const c2 = hslToHex(state.h2, 80, 60);
+
+            const gradient = `linear-gradient(${state.angle}deg, ${c1}, ${c2})`;
+
+            // Update Preview
+            preview.style.background = gradient;
+
+            // Update Text Values
+            color1Val.textContent = c1.toUpperCase();
+            color2Val.textContent = c2.toUpperCase();
+            angleVal.textContent = `${state.angle}°`;
+
+            // Update Output Code
+            cssOutput.textContent = `background: ${gradient};`;
+
+            // Update Slider Accents (optional visual polish)
+            color1Val.style.color = c1;
+            color2Val.style.color = c2;
+
+            // Update Glow
+            document.querySelector('.glow-bg').style.background =
+                `radial-gradient(circle, ${c1}20 0%, ${c2}00 70%)`;
+        }
+
+        // Event Listeners
+        color1Slider.addEventListener('input', (e) => {
+            state.h1 = e.target.value;
+            updateGradient();
+        });
+
+        color2Slider.addEventListener('input', (e) => {
+            state.h2 = e.target.value;
+            updateGradient();
+        });
+
+        angleSlider.addEventListener('input', (e) => {
+            state.angle = e.target.value;
+            updateGradient();
+        });
+
+        // Copy Functionality
+        copyBtn.addEventListener('click', () => {
+            const code = cssOutput.textContent.trim();
+            navigator.clipboard.writeText(code).then(() => {
+                const originalText = btnText.textContent;
+                btnText.textContent = 'Kopyalandı!';
+                copyBtn.classList.add('bg-green-600');
+                copyBtn.classList.remove('from-purple-600', 'to-blue-600');
+
+                setTimeout(() => {
+                    btnText.textContent = originalText;
+                    copyBtn.classList.remove('bg-green-600');
+                    copyBtn.classList.add('from-purple-600', 'to-blue-600');
+                }, 2000);
+            });
+        });
+
+        // Initial Call
+        updateGradient();
+    </script>
+</body>
+
+</html>
