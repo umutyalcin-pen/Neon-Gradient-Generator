@@ -36,7 +36,6 @@
             overflow-x: hidden;
         }
 
-        /* Custom Range Slider Styling */
         input[type=range] {
             -webkit-appearance: none;
             appearance: none;
@@ -91,11 +90,11 @@
 
 <body class="min-h-screen flex items-center justify-center p-4 relative selection:bg-purple-500 selection:text-white">
 
-    <!-- Background Glow -->
+    
     <div class="glow-bg"></div>
 
     <div class="max-w-md w-full glass-panel rounded-3xl p-8 shadow-2xl relative overflow-hidden">
-        <!-- Header -->
+        
         <div class="text-center mb-8">
             <h1
                 class="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-gray-400 via-gray-600 to-gray-800 tracking-tight">
@@ -104,7 +103,7 @@
             <p class="text-gray-600 text-sm mt-2 font-light">İstediğiniz rengin css kodunu tek tıkla kopyalayın</p>
         </div>
 
-        <!-- Gradient Preview -->
+      
         <div class="relative group">
             <div id="gradient-preview"
                 class="w-full h-48 rounded-2xl shadow-neon transition-all duration-500 mb-8 border border-white/10">
@@ -114,9 +113,9 @@
             </div>
         </div>
 
-        <!-- Controls -->
+       
         <div class="space-y-6">
-            <!-- Color 1 Slider -->
+            
             <div class="space-y-2">
                 <div class="flex justify-between text-xs uppercase tracking-wider text-gray-400 font-semibold">
                     <label>RENK 1</label>
@@ -125,7 +124,7 @@
                 <input type="range" id="color1-hue" min="0" max="360" value="270" class="w-full">
             </div>
 
-            <!-- Color 2 Slider -->
+           
             <div class="space-y-2">
                 <div class="flex justify-between text-xs uppercase tracking-wider text-gray-400 font-semibold">
                     <label>RENK 2</label>
@@ -134,7 +133,7 @@
                 <input type="range" id="color2-hue" min="0" max="360" value="200" class="w-full">
             </div>
 
-            <!-- Angle Slider -->
+            
             <div class="space-y-2">
                 <div class="flex justify-between text-xs uppercase tracking-wider text-gray-400 font-semibold">
                     <label>AÇI</label>
@@ -144,7 +143,7 @@
             </div>
         </div>
 
-        <!-- CSS Output & Copy -->
+       
         <div class="mt-8 pt-6 border-t border-gray-700/50">
             <div class="relative">
                 <code id="css-output"
@@ -163,7 +162,7 @@
                 </button>
             </div>
 
-            <!-- GitHub Link -->
+            
             <div class="mt-6 text-center">
                 <a href="https://github.com/umutyalcin-pen" target="_blank"
                     class="text-gray-500 hover:text-white text-xs transition-colors flex items-center justify-center gap-2">
@@ -178,7 +177,7 @@
     </div>
 
     <script>
-        // Elements
+       
         const preview = document.getElementById('gradient-preview');
         const color1Slider = document.getElementById('color1-hue');
         const color2Slider = document.getElementById('color2-hue');
@@ -190,14 +189,13 @@
         const copyBtn = document.getElementById('copy-btn');
         const btnText = document.getElementById('btn-text');
 
-        // State
+     
         let state = {
             h1: 270,
             h2: 200,
             angle: 135
         };
 
-        // Helper: HSL to Hex
         function hslToHex(h, s, l) {
             l /= 100;
             const a = s * Math.min(l, 1 - l) / 100;
@@ -209,35 +207,35 @@
             return `#${f(0)}${f(8)}${f(4)}`;
         }
 
-        // Update Function
+       
         function updateGradient() {
-            // Using high saturation and lightness for neon effect
+            
             const c1 = hslToHex(state.h1, 80, 60);
             const c2 = hslToHex(state.h2, 80, 60);
 
             const gradient = `linear-gradient(${state.angle}deg, ${c1}, ${c2})`;
 
-            // Update Preview
+           
             preview.style.background = gradient;
 
-            // Update Text Values
+            
             color1Val.textContent = c1.toUpperCase();
             color2Val.textContent = c2.toUpperCase();
             angleVal.textContent = `${state.angle}°`;
 
-            // Update Output Code
+           
             cssOutput.textContent = `background: ${gradient};`;
 
-            // Update Slider Accents (optional visual polish)
+           
             color1Val.style.color = c1;
             color2Val.style.color = c2;
 
-            // Update Glow
+          
             document.querySelector('.glow-bg').style.background =
                 `radial-gradient(circle, ${c1}20 0%, ${c2}00 70%)`;
         }
 
-        // Event Listeners
+  
         color1Slider.addEventListener('input', (e) => {
             state.h1 = e.target.value;
             updateGradient();
@@ -253,7 +251,7 @@
             updateGradient();
         });
 
-        // Copy Functionality
+       
         copyBtn.addEventListener('click', () => {
             const code = cssOutput.textContent.trim();
             navigator.clipboard.writeText(code).then(() => {
@@ -270,7 +268,7 @@
             });
         });
 
-        // Initial Call
+      
         updateGradient();
     </script>
 </body>
